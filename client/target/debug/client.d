@@ -1,1 +1,1 @@
-C:\Users\chase\IdeaProjects\client\target\debug\client.exe: C:\Users\chase\IdeaProjects\client\src\main.rs C:\Users\chase\IdeaProjects\client\src\server_connect.rs
+C:\Users\chase\Desktop\chat\ app\chat-app\client\target\debug\client.exe: C:\Users\chase\Desktop\chat\ app\chat-app\client\src\input.rs C:\Users\chase\Desktop\chat\ app\chat-app\client\src\main.rs C:\Users\chase\Desktop\chat\ app\chat-app\client\src\server_connect.rs

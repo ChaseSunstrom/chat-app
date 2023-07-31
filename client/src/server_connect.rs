@@ -1,6 +1,7 @@
 use std::io::{Read, Write};
 use std::net::{SocketAddr, TcpStream, Ipv4Addr, SocketAddrV4};
 use std::str::from_utf8;
+use crate::input::get_input;
 
 
 pub fn connect(ip: String, port: u16) {
@@ -20,9 +21,17 @@ pub fn connect(ip: String, port: u16) {
         )
     );
 
-    let msg = String::from("Hello, World!");
+    let mut msg = get_input();
 
-    const BUFFER_SIZE: usize = 13;
+    const BUFFER_SIZE: usize = 100;
+
+    if msg.len() < BUFFER_SIZE {
+        while msg.len() < BUFFER_SIZE {
+            msg.push_str(" ");
+        }
+    } else if msg.len() > BUFFER_SIZE{
+         msg.truncate(BUFFER_SIZE);
+    }
 
     match TcpStream::connect(socket) {
         Ok(mut stream) => {

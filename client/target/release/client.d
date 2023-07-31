@@ -1,0 +1,1 @@
+C:\Users\chase\Desktop\chat\ app\chat-app\client\target\release\client.exe: C:\Users\chase\Desktop\chat\ app\chat-app\client\src\input.rs C:\Users\chase\Desktop\chat\ app\chat-app\client\src\main.rs C:\Users\chase\Desktop\chat\ app\chat-app\client\src\server_connect.rs

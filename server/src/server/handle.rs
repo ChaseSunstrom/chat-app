@@ -6,8 +6,6 @@ use std::str::from_utf8;
 
 use crate::message::*;
 
-#[path = "../client/connect.rs"]
-mod connect;
 
 pub fn handle_client(mut stream: TcpStream) {
     let mut buffer = [0 as u8; 50];

@@ -6,9 +6,6 @@ pub mod run;
 #[path = "common/message.rs"]
 pub mod message;
 
-#[path = "client/connect.rs"]
-pub mod connect;
-
 fn main() {
     let args: Vec<String> = env::args().collect();
 
