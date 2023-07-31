@@ -5,9 +5,9 @@ mod server_connect;
 mod input;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    //let args: Vec<String> = env::args().collect();
 
-    match args.len() {
+    /*match args.len() {
         3 => {
             let ip = args[1].parse::<String>().unwrap();
 
@@ -19,5 +19,7 @@ fn main() {
         _ => {
 
         }
-    }
+    }*/
+
+    server_connect::connect();
 }
