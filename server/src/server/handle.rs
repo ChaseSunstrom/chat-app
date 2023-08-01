@@ -4,28 +4,30 @@ use std::thread;
 use std::io::{Read, Write};
 use std::str::from_utf8;
 
-use crate::message::*;
-
-
 pub fn handle_client(mut stream: TcpStream) {
-    let mut buffer = [0 as u8; 50];
+    let mut buffer = [0 as u8; 100];
 
-    while match stream.read(&mut buffer) {
-        Ok(size) => {
-            stream.write(&buffer[0..size]).unwrap();
-            true
-        },
-        Err(_) => {
-            println!("[CLIENT] Connection closed {}", stream.peer_addr().unwrap());
-            stream.shutdown(Shutdown::Both).unwrap();
-            false
+    loop {
+        match stream.read(&mut buffer) {
+            Ok(size) => {
+                if size == 0 {
+                    // Connection closed by the client
+                    break;
+                }
+                let message = from_utf8(&buffer[0..size]).unwrap();
+                println!("[CLIENT] {}", message);
+
+                // Echo back the message
+                stream.write(&buffer[0..size]).unwrap();
+            },
+            Err(_) => {
+                // Connection error occurred
+                break;
+            }
         }
-    } {
-        println!("[CLIENT] {}", from_utf8(&buffer).unwrap());
-        stream.shutdown(Shutdown::Both).unwrap();
     }
 
-
+    stream.shutdown(Shutdown::Both).unwrap();
 }
 
 pub fn stream_listen(socket: SocketAddr) {
@@ -34,13 +36,10 @@ pub fn stream_listen(socket: SocketAddr) {
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                println!("New connection: {}", stream.peer_addr().unwrap());
-
                 thread::spawn(move || {
                     handle_client(stream);
                 });
             }
-
             Err(e) => {
                 println!("Error: {}", e);
             }

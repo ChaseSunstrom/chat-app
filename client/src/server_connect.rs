@@ -1,26 +1,9 @@
 use std::io::{Read, Write};
-use std::net::{SocketAddr, TcpStream, Ipv4Addr, SocketAddrV4};
+use std::net::{SocketAddr, TcpStream, Ipv4Addr, SocketAddrV4, IpAddr};
 use std::str::from_utf8;
-use crate::input::get_input;
+use crate::input::*;
 
-
-pub fn connect(/*ip: String, port: u16*/) {
-    /*let split_ip = ip.split('.')
-        .map(|x| x.parse::<u8>().unwrap())
-        .collect::<Vec<u8>>();
-
-    let socket = SocketAddr::V4(
-        SocketAddrV4::new(
-            Ipv4Addr::new(
-                split_ip[0],
-                split_ip[1],
-                split_ip[2],
-                split_ip[3],
-            ),
-            port
-        )
-    );*/
-
+pub fn connect() {
     let socket = SocketAddr::V4(
         SocketAddrV4::new(
             Ipv4Addr::new(
@@ -34,22 +17,22 @@ pub fn connect(/*ip: String, port: u16*/) {
     );
 
 
-    loop {
-        let mut msg = get_input();
+    //let username = get_name();
 
-        const BUFFER_SIZE: usize = 100;
+    match TcpStream::connect(socket) {
+        Ok(mut stream) => {
+            loop {
+                let mut msg = get_input();
 
-        if msg.len() < BUFFER_SIZE {
-            while msg.len() < BUFFER_SIZE {
-                msg.push_str(" ");
-            }
-        } else if msg.len() > BUFFER_SIZE{
-            msg.truncate(BUFFER_SIZE);
-        }
+                const BUFFER_SIZE: usize = 100;
 
-        match TcpStream::connect(socket) {
-            Ok(mut stream) => {
-                //bincode::serialize(&message).unwrap();
+                if msg.len() < BUFFER_SIZE {
+                    while msg.len() < BUFFER_SIZE {
+                        msg.push_str(" ");
+                    }
+                } else if msg.len() > BUFFER_SIZE {
+                    msg.truncate(BUFFER_SIZE);
+                }
 
                 stream.write(msg.as_bytes()).unwrap();
 
@@ -57,24 +40,25 @@ pub fn connect(/*ip: String, port: u16*/) {
 
                 match stream.read_exact(&mut buffer) {
                     Ok(_) => {
-                        if &buffer == msg.as_bytes() {
+                        if &buffer[0..BUFFER_SIZE] == msg.as_bytes() {
                             println!("[SERVER] Message sent: {}", msg);
                         } else {
                             let text = from_utf8(&buffer).unwrap();
-                            println!("[SERVER] Failed to recieve message: {}\n
-                                           Got instead: {}", msg, text);
+                            println!(
+                                "[SERVER] Failed to receive message: {}\nGot instead: {}",
+                                msg, text
+                            );
                         }
-                    },
+                    }
                     Err(e) => {
-                        println!("[SERVER] Failed to recieve message: {}", e);
+                        println!("[SERVER] Failed to receive message: {}", e);
                     }
                 }
-            },
-            Err(e) => {
-                println!("[SERVER] Failed to connect: {}", e);
             }
         }
-
-        println!("Connection closed.");
+        Err(e) => {
+            println!("[SERVER] Failed to connect: {}", e);
+        }
     }
 }
+

@@ -3,3 +3,8 @@ pub fn get_input() -> String {
     std::io::stdin().read_line(&mut input).unwrap();
     input
 }
+
+pub fn get_name() -> String {
+    println!("Enter in a username: ");
+    get_input()
+}
