@@ -3,16 +3,19 @@ use std::net::{SocketAddr, TcpStream, Ipv4Addr, SocketAddrV4, IpAddr};
 use std::str::from_utf8;
 use crate::input::*;
 
-pub fn connect() {
+pub fn connect(ip: Option<String>, port: Option<u16>) {
+
+    ip.unwrap();
+
     let socket = SocketAddr::V4(
         SocketAddrV4::new(
             Ipv4Addr::new(
-                192,
-                168,
-                1,
-                151,
+                ip[0],
+                ip[1],
+                ip[2],
+                ip[3],
             ),
-            8080
+            port.unwrap()
         )
     );
 
@@ -36,7 +39,7 @@ pub fn connect() {
 
                 stream.write(msg.as_bytes()).unwrap();
 
-                let mut buffer = [0 as u8; BUFFER_SIZE];
+                let mut buffer = [0; BUFFER_SIZE];
 
                 match stream.read_exact(&mut buffer) {
                     Ok(_) => {

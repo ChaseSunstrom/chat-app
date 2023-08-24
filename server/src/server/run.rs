@@ -12,9 +12,7 @@ pub fn default() {
         )
     );
 
-    thread::spawn(move || {
-        handle::stream_listen(socket);
-    });
+    handle::stream_listen(socket);
 
     /*thread::spawn(move || {
         connect::send_message(socket, String::from("Hello, World!"));
