@@ -3,10 +3,7 @@ use std::net::{SocketAddr, TcpStream, Ipv4Addr, SocketAddrV4, IpAddr};
 use std::str::from_utf8;
 use crate::input::*;
 
-pub fn connect(ip: Option<String>, port: Option<u16>) {
-
-    ip.unwrap();
-
+pub fn connect(ip: Vec<u8>, port: u16) {
     let socket = SocketAddr::V4(
         SocketAddrV4::new(
             Ipv4Addr::new(
@@ -15,12 +12,9 @@ pub fn connect(ip: Option<String>, port: Option<u16>) {
                 ip[2],
                 ip[3],
             ),
-            port.unwrap()
+            port
         )
     );
-
-
-    //let username = get_name();
 
     match TcpStream::connect(socket) {
         Ok(mut stream) => {
@@ -64,4 +58,6 @@ pub fn connect(ip: Option<String>, port: Option<u16>) {
         }
     }
 }
+
+
 
